@@ -25,7 +25,7 @@ try {
 }
 
 try {
-    echo "<h2>Liste des Classes</h2>";
+    echo "<h2>Liste des classes</h2>";
     $sql = "SELECT id, libelle FROM classes";
     $stmt = $dbPDO->query($sql);
 
