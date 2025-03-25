@@ -139,5 +139,35 @@ try {
         echo "Erreur lors de la récupération des classes : " . $e->getMessage();
     }
     
+    try {
+        echo "<h2>Professeurs avec leur matière et leur classe</h2>";
+    
+        // Requête SQL sur bdd 
+        $sql = "SELECT 
+                    professeurs.nom AS nom_professeur, 
+                    professeurs.prenom AS prenom_professeur, 
+                    matiere.lib AS matiere, 
+                    classes.libelle AS classe
+                FROM professeurs
+                INNER JOIN matiere ON professeurs.id_matiere = matiere.id
+                INNER JOIN classes ON professeurs.id_classe = classes.id";
+    
+        $stmt = $dbPDO->query($sql);
+    
+        if ($stmt->rowCount() > 0) {
+            echo "<ul>";
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                echo "<li> Professeur : " . htmlspecialchars($row["prenom_professeur"]) . " " . htmlspecialchars($row["nom_professeur"]) .
+                    " Matière : " . htmlspecialchars($row["matiere"]) .
+                    " Classe : " . htmlspecialchars($row["classe"]) .
+                    "</li>";
+            }
+            echo "</ul>";
+        } else {
+            echo "<p>Aucun professeur trouvé avec sa matière et sa classe.</p>";
+        }
+    } catch (PDOException $e) {
+        echo "Erreur : " . $e->getMessage();
+    }
     
 ?>
