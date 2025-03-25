@@ -1,3 +1,14 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Informations Étudiants et Classes</title>
+    <link rel="stylesheet" href="css/Fichier.css"> 
+</head>
+<body>
+    
+    
+    
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -94,7 +105,7 @@ try {
     try {
         echo "<h2>Liste des Étudiants</h2>";
         $sql = "SELECT nom, prenom FROM etudiants"; // Sélection des étudiants
-        $stmt = $dbPDO->query($sql);
+        $stmt = $dbPDO->query($sql); //exécute requête SQL sur bdd
     
         if ($stmt->rowCount() > 0) { // Vérifie s’il y a des étudiants
             echo "<ul>";
@@ -107,6 +118,25 @@ try {
         }
     } catch (PDOException $e) {
         echo "Erreur lors de la récupération des étudiants : " . $e->getMessage();
+    }
+   
+    
+    try {
+        echo "<h2>Liste des classes</h2>";
+        $sql = "SELECT id, libelle FROM classes";
+        $stmt = $dbPDO->query($sql);
+    
+        if ($stmt->rowCount() > 0) {
+            echo "<ul>";
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                echo "<li>ID: " . htmlspecialchars($row["id"]) . " - Classe: " . htmlspecialchars($row["libelle"]) . "</li>";
+            }
+            echo "</ul>";
+        } else {
+            echo "<p>Aucune classe trouvée.</p>";
+        }
+    } catch (PDOException $e) {// erreur
+        echo "Erreur lors de la récupération des classes : " . $e->getMessage();
     }
     
     
