@@ -74,3 +74,27 @@ try {
     echo "Erreur : ".$e->getMessage();
 }
 ?>
+
+<h2>Ajouter une nouvelle matière</h2>
+
+<form method="POST">
+    <label>Nom de la matière :</label>
+    <input type="text" name="nom_matiere" required>
+    <button type="submit">Ajouter</button>
+</form>
+
+<?php
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['nom_matiere'])) {
+    try {
+        $stmt = $dbPDO->prepare("INSERT INTO matiere (lib) VALUES (:libelle)");
+        $stmt->execute(['libelle' => $_POST['nom_matiere']]);
+        echo "<p>Matière ajoutée avec succès : ".htmlspecialchars($_POST['nom_matiere'])."</p>";
+    } catch (PDOException $e) {
+        echo "<p>Erreur d'insertion : ".$e->getMessage()."</p>";
+    }
+}
+?>
+
+</body>
+</html>
