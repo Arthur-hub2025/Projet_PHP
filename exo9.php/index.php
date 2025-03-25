@@ -91,5 +91,23 @@ try {
     } catch (PDOException $e) {
         echo " Erreur lors de la récupération des enseignements : " . $e->getMessage();
     }
+    try {
+        echo "<h2>Liste des Étudiants</h2>";
+        $sql = "SELECT nom, prenom FROM etudiants"; // Sélection des étudiants
+        $stmt = $dbPDO->query($sql);
+    
+        if ($stmt->rowCount() > 0) { // Vérifie s’il y a des étudiants
+            echo "<ul>";
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) { // Boucle sur chaque étudiant
+                echo "<li>" . htmlspecialchars($row["prenom"]) . " " . htmlspecialchars($row["nom"]) . "</li>";
+            }
+            echo "</ul>";
+        } else {
+            echo "<p>Aucun étudiant trouvé.</p>";
+        }
+    } catch (PDOException $e) {
+        echo "Erreur lors de la récupération des étudiants : " . $e->getMessage();
+    }
+    
     
 ?>
