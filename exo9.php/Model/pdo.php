@@ -1,15 +1,13 @@
 <?php
-$servername = "localhost"; // Nom du serveur
-$username = "root"; // Nom d'utilisateur de la base de données
-$password = "root"; // Mot de passe de la base de données
-$dbname = "junia.sql"; // Nom de la base de données
+$host = "localhost";
+$dbname = "junia.sql"; // Remplace par ton vrai nom de base
+$username = "root"; // Remplace si tu as un autre utilisateur
+$password = "root"; // Mets ton mot de passe MySQL s'il y en a un
 
 try {
-    $pdo = new PDO('mysql:host=localhost;dbname=junia.sql;charset=utf8', 'root', 'root');
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (Exception $e) {
-    die('Erreur : ' . $e->getMessage());
+} catch (PDOException $e) {
+    die("Erreur de connexion : " . $e->getMessage());
 }
-
-
 ?>

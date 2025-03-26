@@ -1,3 +1,11 @@
+<?php
+session_start();
+if (!isset($_SESSION['user'])) {
+    header("Location: registrer.php");
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -65,3 +73,4 @@ $profs = $pdo->query("
     </select>
     <button type="submit">Valider</button>
 </form>
+
