@@ -75,7 +75,7 @@ try {
 }
 ?>
 
-<h1>PARTIE 2 : Ajouter une nouvelle matière</h1>
+<h1>PARTIE 3 : Ajout Materiel</h1>
 
 <a href="Views/nouvelle_matiere.php">
     <button type="button">Ajouter une matière</button>
@@ -94,6 +94,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['libelle'])) {
     }
 }
 ?>
+<h2>Ajout Élève</h2>
+
+<a href="Views/nouvelle_etudiant.php">
+    <button type="button">Ajouter un Élève</button>
+</a>
+</form>
+
+<?php
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['nom']) && !empty($_POST['prenom']) && isset($_POST['classe_id'])) {
+    try {
+        $stmt = $dbPDO->prepare("INSERT INTO etudiants (nom, prenom, classe_id) VALUES (:nom, :prenom, :classe_id)");
+        $stmt->execute([
+            'nom' => $_POST['nom'],
+            'prenom' => $_POST['prenom'],
+            'classe_id' => $_POST['classe_id']
+        ]);
+        echo "<p>Élève ajouté avec succès : " . htmlspecialchars($_POST['nom']) . " " . htmlspecialchars($_POST['prenom']) . "</p>";
+    } catch (PDOException $e) {
+        echo "<p>Erreur d'insertion : " . $e->getMessage() . "</p>";
+    }
+}
+?>
+
+
+</form>
 
 </body>
 </html>
