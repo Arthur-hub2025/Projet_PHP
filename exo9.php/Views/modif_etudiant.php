@@ -1,35 +1,34 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Liste des étudiants</title>
-    <link rel="stylesheet" href="../css/Fichier.css">
-</head>
-<body>
-
-<h2>Liste des étudiants</h2>
-
 <?php
 require '../Model/pdo.php';
 
-try {
-    $stmt = $dbPDO->query("SELECT id, nom, prenom FROM etudiants");
+if(isset($_GET['id'])) {
+    $req = $pdo->prepare("SELECT * FROM etudiants WHERE id = ?");
+    $req->execute([$_GET['id']]);
+    $etu = $req->fetch();
+}
 
-    if ($stmt->rowCount() > 0) {
-        echo "<ul>";
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            echo "<li>" . htmlspecialchars($row['prenom']) . " " . htmlspecialchars($row['nom']) . 
-                 " <a href='nouvelle_etudiant.php?id=" . $row['id'] . "'><button>Modifier</button></a></li>";
-        }
-        echo "</ul>";
-    } else {
-        echo "<p>Aucun étudiant trouvé.</p>";
-    }
-} catch (PDOException $e) {
-    echo "<p>Erreur : " . $e->getMessage() . "</p>";
+$classes = $pdo->query("SELECT * FROM classes")->fetchAll();
+
+if(isset($_POST['prenom'], $_POST['nom'], $_POST['classe_id'])) {
+    $req = $pdo->prepare("UPDATE etudiants SET prenom=?, nom=?, classe_id=? WHERE id=?");
+    $req->execute([$_POST['prenom'], $_POST['nom'], $_POST['classe_id'], $_GET['id']]);
+    header('Location: ../index.php');
 }
 ?>
-<p><a href="../index.php">Retour à l'accueil</a></p>
 
-</body>
-</html>
+<form method="POST">
+    <input type="text" name="prenom" value="<?= $etu['prenom'] ?>">
+    <input type="text" name="nom" value="<?= $etu['nom'] ?>">
+
+    <select name="classe_id">
+        <?php foreach($classes as $classe): ?>
+            <option value="<?= $classe['id'] ?>" <?= ($classe['id'] == $etu['classe_id']) ? 'selected' : '' ?>>
+                <?= $classe['libelle'] ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+
+    <button type="submit">Modifier</button>
+</form>
+
+<a href="../index.php">Retour</a>
