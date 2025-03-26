@@ -1,5 +1,5 @@
 <?php
-require '../Model/pdo.php';
+require '../Model/pdo.php'; // appelle BDD
 
 if(isset($_POST['libelle'])) {
     $libelle = htmlspecialchars($_POST['libelle']);
@@ -20,4 +20,4 @@ if(isset($_POST['libelle'])) {
     echo "Erreur : Formulaire incomplet.";
 }
 ?>
-<a href="../index.php">Retour</a>
+<a href="../index.php">Retour</a> //acceuil
