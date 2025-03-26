@@ -11,16 +11,18 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 require 'Model/pdo.php'; 
-
+echo "<ul>";
 echo "<h1>PARTIE 1 : Informations de la base de données</h1>";
 
 try {
     echo "<h2>Liste des Étudiants</h2>";
-    $stmt = $dbPDO->query("SELECT nom, prenom FROM etudiants");
+    $stmt = $dbPDO->query("SELECT id, nom, prenom FROM etudiants"); 
     if ($stmt->rowCount() > 0) {
         echo "<ul>";
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            echo "<li>".htmlspecialchars($row["prenom"])." ".htmlspecialchars($row["nom"])."</li>";
+            echo "<li>" . htmlspecialchars($row["prenom"]) . " " . htmlspecialchars($row["nom"]) .
+                 " <a href='Views/modif_etudiant.php?id=" . $row["id"] . "'>Modifier</a>" .
+                 " <a href='Views/supprimer_etudiant.php?id=" . $row["id"] . "'>Supprimer</a></li>"; // Lien de suppression ajouté
         }
         echo "</ul>";
     } else {
@@ -32,7 +34,7 @@ try {
     if ($stmt->rowCount() > 0) {
         echo "<ul>";
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            echo "<li>Classe : ".htmlspecialchars($row["libelle"])."</li>";
+            echo "<li>Classe : " . htmlspecialchars($row["libelle"]) . "</li>";
         }
         echo "</ul>";
     } else {
@@ -44,7 +46,7 @@ try {
     if ($stmt->rowCount() > 0) {
         echo "<ul>";
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            echo "<li>".htmlspecialchars($row["prenom"])." ".htmlspecialchars($row["nom"])."</li>";
+            echo "<li>" . htmlspecialchars($row["prenom"]) . " " . htmlspecialchars($row["nom"]) . "</li>";
         }
         echo "</ul>";
     } else {
@@ -61,9 +63,9 @@ try {
     if ($stmt->rowCount() > 0) {
         echo "<ul>";
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            echo "<li>Professeur : ".htmlspecialchars($row["prenom_prof"])." ".htmlspecialchars($row["nom_prof"]).
-                 " Matière : ".htmlspecialchars($row["matiere"]).
-                 " Classe : ".htmlspecialchars($row["classe"])."</li>";
+            echo "<li>Professeur : " . htmlspecialchars($row["prenom_prof"]) . " " . htmlspecialchars($row["nom_prof"]) .
+                 " Matière : " . htmlspecialchars($row["matiere"]) .
+                 " Classe : " . htmlspecialchars($row["classe"]) . "</li>";
         }
         echo "</ul>";
     } else {
@@ -71,11 +73,11 @@ try {
     }
 
 } catch (PDOException $e) {
-    echo "Erreur : ".$e->getMessage();
+    echo "Erreur : " . $e->getMessage();
 }
 ?>
 
-<h1>PARTIE 3 : Ajout Materiel</h1>
+<h1>PARTIE 3 : Ajout Matière</h1>
 
 <a href="Views/nouvelle_matiere.php">
     <button type="button">Ajouter une matière</button>
@@ -88,12 +90,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['libelle'])) {
     try {
         $stmt = $dbPDO->prepare("INSERT INTO matiere (lib) VALUES (:libelle)");
         $stmt->execute(['libelle' => $_POST['libelle']]);
-        echo "<p>Matière ajoutée avec succès : ".htmlspecialchars($_POST['libelle'])."</p>";
+        echo "<p>Matière ajoutée avec succès : " . htmlspecialchars($_POST['libelle']) . "</p>";
     } catch (PDOException $e) {
-        echo "<p>Erreur d'insertion : ".$e->getMessage()."</p>";
+        echo "<p>Erreur d'insertion : " . $e->getMessage() . "</p>";
     }
 }
 ?>
+
 <h2>Ajout Élève</h2>
 
 <a href="Views/nouvelle_etudiant.php">
