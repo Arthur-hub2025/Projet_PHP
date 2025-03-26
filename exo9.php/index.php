@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Informations Étudiants et Classes</title>
+    <title>Informations Ecole</title>
     <link rel="stylesheet" href="css/fichier.css"> 
 </head>
 <body>
@@ -12,7 +12,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 require 'Model/pdo.php'; 
 
-echo "<h1>Informations de la base de données</h1>";
+echo "<h1>PARTIE 1 : Informations de la base de données</h1>";
 
 try {
     echo "<h2>Liste des Étudiants</h2>";
@@ -32,7 +32,7 @@ try {
     if ($stmt->rowCount() > 0) {
         echo "<ul>";
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            echo "<li>"." - Classe: ".htmlspecialchars($row["libelle"])."</li>";
+            echo "<li>Classe : ".htmlspecialchars($row["libelle"])."</li>";
         }
         echo "</ul>";
     } else {
@@ -75,21 +75,20 @@ try {
 }
 ?>
 
-<h2>Ajouter une nouvelle matière</h2>
+<h1>PARTIE 2 : Ajouter une nouvelle matière</h1>
 
-<form method="POST">
-    <label>Nom de la matière :</label>
-    <input type="text" name="nom_matiere" required>
-    <button type="submit">Ajouter</button>
+<a href="Views/nouvelle_matiere.php">
+    <button type="button">Ajouter une matière</button>
+</a>
+
 </form>
 
 <?php
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['nom_matiere'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['libelle'])) {
     try {
         $stmt = $dbPDO->prepare("INSERT INTO matiere (lib) VALUES (:libelle)");
-        $stmt->execute(['libelle' => $_POST['nom_matiere']]);
-        echo "<p>Matière ajoutée avec succès : ".htmlspecialchars($_POST['nom_matiere'])."</p>";
+        $stmt->execute(['libelle' => $_POST['libelle']]);
+        echo "<p>Matière ajoutée avec succès : ".htmlspecialchars($_POST['libelle'])."</p>";
     } catch (PDOException $e) {
         echo "<p>Erreur d'insertion : ".$e->getMessage()."</p>";
     }
